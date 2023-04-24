@@ -1,21 +1,24 @@
 package cleaner
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 )
 
-var spaceRegexp *regexp.Regexp
+var spaceRegexp *regexp.Regexp //used for removing double spaces
 
 func init() {
-	spaceRegexp = regexp.MustCompile(`\s+`)
+	spaceRegexp = regexp.MustCompile(`\s+`) //init the regexp
 }
 
+// Clean simply replaces french usual prominent characters with normal ones, special chars with spaces
+// trims and removes double spaces
 func Clean(str string) string {
+
 	str = strings.ToLower(str)
 	cleaned := ""
 
+	//simply iterate over the runes and replace it when necessary
 	for _, r := range str {
 		switch r {
 		case 48, 49, 50, 51, 52, 53, 54, 55, 56, 57: //0 to 9 unchanged
@@ -38,11 +41,11 @@ func Clean(str string) string {
 			cleaned += "u"
 		case 121, 255: //"y" variants
 			cleaned += "y"
-		default:
+		default: //other chars : replace with space
 			cleaned += " "
 		}
 	}
-	fmt.Println([]rune(cleaned))
+
 	return strings.TrimSpace(spaceRegexp.ReplaceAllString(strings.ToUpper(string(cleaned)), " "))
 
 }
